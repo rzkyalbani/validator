@@ -1,0 +1,16 @@
+{
+    "name": "tiny-validator",
+    "version": "0.0.1",
+    "type": "module",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "dev": "tsx watch src/index.ts",
+        "build": "tsc",
+        "start": "node dist/index.js"
+    },
+    "devDependencies": {
+        "tsx": "^4.21.0",
+        "typescript": "^5.9.3"
+    }
+}
