@@ -1,13 +1,20 @@
+import { ZOptional } from "./ZOptional";
 import { ZType } from "./ZType";
 
-export class ZObject<T extends Record<string, ZType<any>>> extends ZType<{
-    [K in keyof T]: ReturnType<T[K]["parse"]>;
-}> {
+type Clean<T> = { [K in keyof T]: T[K] };
+
+type ZObjectInferred<T extends Record<string, ZType<any>>> = Clean<{
+    [K in keyof T as T[K] extends ZOptional<any> ? never : K]: ReturnType<T[K]["parse"]>
+} & {
+    [K in keyof T as T[K] extends ZOptional<any> ? K : never]?: ReturnType<T[K]["parse"]>
+}>
+
+export class ZObject<T extends Record<string, ZType<any>>> extends ZType<ZObjectInferred<T>> {
     constructor(private shape: T) {
         super();
     }
 
-    parse(value: unknown) {
+    parse(value: unknown): ZObjectInferred<T> {
         if (typeof value !== "object" || value === null) {
             throw new Error("Value harus object");
         }
